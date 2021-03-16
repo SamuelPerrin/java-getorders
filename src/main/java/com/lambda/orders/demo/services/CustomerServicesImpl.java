@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
+
 @Transactional
 @Service
 public class CustomerServicesImpl implements CustomerServices {
@@ -16,5 +18,12 @@ public class CustomerServicesImpl implements CustomerServices {
     @Override
     public Customer save(Customer customer) {
         return customersRepository.save(customer);
+    }
+
+    @Override
+    public Customer findCustomerById(long custcode) {
+        Customer customer = customersRepository.findById(custcode)
+                .orElseThrow(() -> new EntityNotFoundException("Customer " + custcode + " not found!"));
+        return customer;
     }
 }
